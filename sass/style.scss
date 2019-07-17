@@ -1,0 +1,47 @@
+$color1: rgba(239, 100, 97, 1);
+$color2: rgba(228, 179, 99, 1);
+$color3: rgba(232, 233, 235, 1);
+$color4: rgba(224, 223, 213, 1);
+$color5: rgba(49, 54, 56, 1);
+
+$grid-square-number-length: 25;
+$grid-square-number-width: 50;
+$square-diameter: squareDiameter()+0px;
+$board-length: $grid-square-number-length * $square-diameter;
+$board-width: $grid-square-number-width * $square-diameter;
+
+@import url('https://fonts.googleapis.com/css?family=Squada+One&display=swap');
+body{
+  background-color: $color5;
+  font-family: 'Squada One', cursive;
+}
+#background{
+  height: 5000px;
+}
+p{
+  color: $color2;
+  text-align: center;
+}
+.container h1{
+  color: $color2;
+  text-align: center;
+}
+
+.board{
+  display: grid;
+  margin: 20px auto;
+  height: $board-length;
+  width: $board-width;
+  grid-template-columns: repeat($grid-square-number-width, $square-diameter);
+  grid-template-rows: repeat($grid-square-number-length, $square-diameter);
+  background-color: $color4;
+  border: 10px solid $color2;
+}
+
+.square{
+  grid-column: 1,2;
+  grid-row:1,2;
+  color: red;
+  border: 1px solid black;
+  place-self: stretch;
+}

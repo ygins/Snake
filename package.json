@@ -1,0 +1,15 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "description": "Simple Snake Game",
+  "main": "",
+  "scripts": {
+    "test": "nodemon server.js"
+    "main": "node server.js"
+  },
+  "keywords": [
+    "snake"
+  ],
+  "author": "Yonatan Ginsburg",
+  "license": "ISC"
+}

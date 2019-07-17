@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css?family=Squada+One&display=swap");
+/* line 14, ../sass/style.scss */
+body {
+  background-color: #313638;
+  font-family: 'Squada One', cursive; }
+
+/* line 18, ../sass/style.scss */
+#background {
+  height: 5000px; }
+
+/* line 21, ../sass/style.scss */
+p {
+  color: #e4b363;
+  text-align: center; }
+
+/* line 25, ../sass/style.scss */
+.container h1 {
+  color: #e4b363;
+  text-align: center; }
+
+/* line 30, ../sass/style.scss */
+.board {
+  display: grid;
+  margin: 20px auto;
+  height: 500px;
+  width: 1000px;
+  grid-template-columns: repeat(50, 20px);
+  grid-template-rows: repeat(25, 20px);
+  background-color: #e0dfd5;
+  border: 10px solid #e4b363; }
+
+/* line 41, ../sass/style.scss */
+.square {
+  grid-column: 1,2;
+  grid-row: 1,2;
+  color: red;
+  border: 1px solid black;
+  place-self: stretch; }
