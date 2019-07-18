@@ -1,0 +1,38 @@
+body {
+  background-color: #313638; }
+
+#background {
+  height: 5000px; }
+
+p {
+  color: #e4b363;
+  text-align: center; }
+
+.container h1 {
+  color: #e4b363;
+  text-align: center; }
+
+#board {
+  display: grid;
+  margin: 20px auto;
+  height: 500px;
+  width: 1000px;
+  grid-template-columns: repeat(50, 20px);
+  grid-template-rows: repeat(25, 20px);
+  background-color: #e0dfd5;
+  border: 10px solid #e4b363; }
+
+.square {
+  border: .5px solid grey;
+  width: 20px;
+  length: 20px;
+  place-self: stretch; }
+
+.apple {
+  background-color: red; }
+
+.empty {
+  background-color: inherit; }
+
+.snake {
+  background-color: black; }

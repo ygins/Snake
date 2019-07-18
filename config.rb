@@ -4,9 +4,9 @@ require 'sass'
 
 # Set this to the root of your project when deployed:
 http_path = "/"
-css_dir = "stylesheets"
-sass_dir = "sass"
-images_dir = "images"
+css_dir = "public/stylesheets"
+sass_dir = "public/sass"
+images_dir = "public/images"
 javascripts_dir = "scripts"
 
 # You can select your preferred output style here (can be overridden via the command line):
@@ -16,7 +16,7 @@ javascripts_dir = "scripts"
 # relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
-# line_comments = false
+line_comments = false
 
 
 # If you prefer the indented syntax, you might want to regenerate this
@@ -24,14 +24,5 @@ javascripts_dir = "scripts"
 # preferred_syntax = :sass
 # and then run:
 # sass-convert -R --from scss --to sass sass scss && rm -rf sass && mv scss sass
-module Sass::Script::Functions
-  def myRand(max = Sass::Script::Number.new(100))
-    Sass::Script::Number.new(rand(max.value), max.numerator_units, max.denominator_units)
-  end
 
-  def squareDiameter()
-    require 'json'
-    data=JSON.parse(open("options.json").read);
-    Sass::Script::Number.new(data['square-diameter']);
-  end
-end
+require_relative 'public/myfunctions'

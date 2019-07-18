@@ -4,12 +4,16 @@
   "description": "Simple Snake Game",
   "main": "",
   "scripts": {
-    "test": "nodemon server.js"
+    "dev": "nodemon server.js",
     "main": "node server.js"
   },
   "keywords": [
     "snake"
   ],
   "author": "Yonatan Ginsburg",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
 }
