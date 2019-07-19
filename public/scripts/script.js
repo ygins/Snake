@@ -1,10 +1,43 @@
 const BOARD_ID="board";
 const BCKGROUND_ID="background";
 const onLoad=(...funcs)=>window.addEventListener('load',()=>funcs.forEach(func=>func()));
+const randomIntFromInterval=(min,max)=> Math.floor(Math.random()*(max-min+1)+min);
 const OPTIONS={
 sqaureDiameter:20,
 xGridSquareNumber:50,
 zGridSquareNumber:25
+}
+const DIRECTIONS=new Map();
+class Direction{
+  constructor(keyVal){
+    this._keyVal=keyVal;
+    DIRECTIONS.set(keyVal,this);
+    if(keyVal=='38'){//up
+      this._travelFunc=()=>[-1,0];
+      this._name='UP';
+    }
+    else if(keyVal=='40'){//down
+      this._travelFunc=()=>[1,0];
+      this._name="DOWN";
+    }
+    else if(keyVal=='37'){//left
+      this._travelFunc=()=>[0,-1];
+      this._name="LEFT";
+    } else if(keyVal=='39'){//right
+      this._travelFunc=()=>[0,1];
+      this._name="RIGHT";
+    }
+  }
+  canMoveThisWayFrom(row, column,board){
+      let modifiers=this._travelFunc();
+      return row+modifiers[0]!=-1 && board.squares.length>row+modifiers[0] && column+modifiers[0]!=-1 && board.squares[row].length>column+modifiers[1];
+  }
+  getSquareInThisDirection(row, column, board){
+    let modifiers=this._travelFunc();
+    let [newRow, newColumn]=[row+modifiers[0], column+modifiers[1]];
+    return board.squares[newRow][newColumn];
+  }
+  get name(){return this._name;}
 }
 
 
@@ -20,7 +53,7 @@ State.APPLE=new State('apple');
 
 class Square{
   constructor(grid, row, column, state=State.EMPTY){
-    let genGridProp=(start)=>`${start}, ${start+1}`;
+    let genGridProp=(start)=>`${start+1}, ${start+2}`;
     let square=document.createElement('div');
     square.classList.add('square');
     square.classList.add(state.cssClass);
@@ -28,6 +61,8 @@ class Square{
     square.style['grid-template-columns']=genGridProp(column);
     this._square=square;
     this._state=state;
+    this._row=row;
+    this._column=column;
     grid.appendChild(square);
   }
   get docElement(){return this._square;}
@@ -37,15 +72,17 @@ class Square{
     this.docElement.classList.add(state.cssClass);
     this._state=state;
   }
+  get row(){return this._row;}
+  get column(){return this._column;}
 }
 
 class Board{
   constructor(options){
     let grid=document.getElementById(BOARD_ID);
-    let squares={};
-    for(let r=1; r<=options.zGridSquareNumber; r++){
+    let squares=new Array();
+    for(let r=0; r<options.zGridSquareNumber; r++){
       squares[r]=new Array();
-      for(let c=1; c<=options.xGridSquareNumber; c++){
+      for(let c=0; c<options.xGridSquareNumber; c++){
         squares[r][c]=new Square(grid, r, c);
       }
     }
@@ -54,8 +91,89 @@ class Board{
   get squares(){
     return this._squares;
   }
+  spawnApple(){
+    const getRandomSquare=()=>{
+      let squares=this.squares;
+      console.log(squares);
+      console.log("SQYARES LENGTH "+squares.length);
+      let row=randomIntFromInterval(0, squares.length-1);
+      console.log("ROW IS "+row);
+      let column=randomIntFromInterval(0,squares[row].length-1);
+      console.log("COLUMN IS "+column);
+      let returning=squares[row][column];
+      console.log(`RETURNING ${returning}`);
+      return returning;
+    };
+    let toChange=getRandomSquare();
+    while(toChange.state!=State.EMPTY){
+      toChange=getRandomSquare();
+    }
+    console.log(`Apple at ${toChange.row}, ${toChange.column}`);
+    toChange.state=State.APPLE;
+  }
 }
 
 onLoad(()=>{
+  //Initialize Directions
+  const UP=new Direction(38);
+  const DOWN=new Direction(40);
+  const LEFT=new Direction(37);
+  const RIGHT=new Direction(39);
   let myBoard=new Board(OPTIONS);
+  myBoard.squares[5][5].state=State.APPLE;
+  let snakeHead={
+    currentPosition:myBoard.squares[OPTIONS.zGridSquareNumber/2 |0][OPTIONS.xGridSquareNumber/2 |0],
+    currentDirection: RIGHT,
+    tailLength: 5
+  };
+  let trail=new Array();
+  snakeHead.move=function(){
+    if(trail.length>snakeHead.tailLength){
+      let oldTail=trail.shift();
+      oldTail.state=State.EMPTY;
+    }
+      if(!snakeHead.currentDirection.canMoveThisWayFrom(snakeHead.currentPosition.row, snakeHead.currentPosition.column, myBoard)){
+        console.log("COULDNT MOVE!");
+        return true;
+      }
+      let newSquare=snakeHead.currentDirection.getSquareInThisDirection(snakeHead.currentPosition.row, snakeHead.currentPosition.column, myBoard);
+      if(newSquare.state==State.SNAKE){
+        console.log("SNAKE!");
+        return true;
+      }
+      let apple=false;
+      if(newSquare.state==State.APPLE){
+        snakeHead.tailLength+=2;
+        apple=true;
+      }
+      trail.push(snakeHead.currentPosition);
+      console.log("1");
+      snakeHead.currentPosition=newSquare;
+      console.log("2");
+      snakeHead.currentPosition.state=State.SNAKE;
+      console.log("3");
+      if(apple){
+        myBoard.spawnApple();
+      }
+
+      return false;
+    };
+  window.addEventListener('keydown',(event)=>{
+    let direction=DIRECTIONS.get(event.keyCode);
+    if(direction!=undefined){
+      event.preventDefault();
+    }
+    snakeHead.currentDirection= direction|| snakeHead.currentDirection;
+    console.log(`PRESSED: keyCode=${event.keyCode}`);
+  });
+
+  let task=window.setInterval(()=>{console.log(snakeHead.currentDirection.name);
+     console.log(snakeHead);
+     let shouldStop=snakeHead.move();
+     if(shouldStop){
+       console.log("WE STOPPED");
+       clearInterval(task);
+       return;
+     }
+   },100);
 });
