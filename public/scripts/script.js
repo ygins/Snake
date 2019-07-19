@@ -94,21 +94,14 @@ class Board{
   spawnApple(){
     const getRandomSquare=()=>{
       let squares=this.squares;
-      console.log(squares);
-      console.log("SQYARES LENGTH "+squares.length);
       let row=randomIntFromInterval(0, squares.length-1);
-      console.log("ROW IS "+row);
       let column=randomIntFromInterval(0,squares[row].length-1);
-      console.log("COLUMN IS "+column);
-      let returning=squares[row][column];
-      console.log(`RETURNING ${returning}`);
-      return returning;
+      return squares[row][column];
     };
     let toChange=getRandomSquare();
     while(toChange.state!=State.EMPTY){
       toChange=getRandomSquare();
     }
-    console.log(`Apple at ${toChange.row}, ${toChange.column}`);
     toChange.state=State.APPLE;
   }
 }
@@ -133,12 +126,10 @@ onLoad(()=>{
       oldTail.state=State.EMPTY;
     }
       if(!snakeHead.currentDirection.canMoveThisWayFrom(snakeHead.currentPosition.row, snakeHead.currentPosition.column, myBoard)){
-        console.log("COULDNT MOVE!");
         return true;
       }
       let newSquare=snakeHead.currentDirection.getSquareInThisDirection(snakeHead.currentPosition.row, snakeHead.currentPosition.column, myBoard);
       if(newSquare.state==State.SNAKE){
-        console.log("SNAKE!");
         return true;
       }
       let apple=false;
@@ -147,11 +138,8 @@ onLoad(()=>{
         apple=true;
       }
       trail.push(snakeHead.currentPosition);
-      console.log("1");
       snakeHead.currentPosition=newSquare;
-      console.log("2");
       snakeHead.currentPosition.state=State.SNAKE;
-      console.log("3");
       if(apple){
         myBoard.spawnApple();
       }
@@ -164,14 +152,11 @@ onLoad(()=>{
       event.preventDefault();
     }
     snakeHead.currentDirection= direction|| snakeHead.currentDirection;
-    console.log(`PRESSED: keyCode=${event.keyCode}`);
   });
 
-  let task=window.setInterval(()=>{console.log(snakeHead.currentDirection.name);
-     console.log(snakeHead);
+  let task=window.setInterval(()=>{
      let shouldStop=snakeHead.move();
      if(shouldStop){
-       console.log("WE STOPPED");
        clearInterval(task);
        return;
      }
