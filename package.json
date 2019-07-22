@@ -5,15 +5,19 @@
   "main": "",
   "scripts": {
     "dev": "nodemon server.js",
-    "main": "node server.js"
+    "main": "node server.js",
+    "build": "webpack"
   },
   "keywords": [
     "snake"
   ],
   "author": "Yonatan Ginsburg",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1"
-  },
-  "devDependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6"
+  }
 }
