@@ -11,7 +11,6 @@ $square-diameter: $diam-val + 0px;
 $board-length: $grid-square-number-length * $diam-val+0px;
 $board-width: $grid-square-number-width * $diam-val+0px;
 
-
 body{
   background-color: $color5;
 }
